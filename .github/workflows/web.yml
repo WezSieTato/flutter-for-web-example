@@ -18,3 +18,11 @@ jobs:
         with:
           name: web
           path: build/web
+      - name: 🚀 Deploy app on gh-pages branch
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        if: github.ref == 'refs/heads/main'
+        with:
+          BRANCH: gh-pages  # The branch the action should deploy to.
+          FOLDER: ./build/web  # The folder the action should deploy.
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLEAN: true  # Automatically remove deleted files from the deploy branch.
