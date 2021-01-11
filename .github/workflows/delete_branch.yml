@@ -1,0 +1,27 @@
+name: Cleanup after remove branch
+
+on: delete
+
+jobs:
+  clean_up:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: "gh-pages"
+      - name: Remove web app
+        uses: JesseTG/rm@v1.0.2
+        with:
+          path: ${{github.event.ref}}
+      - name: Push changes to gh-pages branch
+        uses: EndBug/add-and-commit@v5 
+        with:
+          add: ${{github.event.ref}}
+          branch: "gh-pages"
+          message: 'Remove web app for ${{github.event.ref}} branch'
+          push: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
